@@ -15,7 +15,10 @@ public class BaseTest {
     {
         DriverFactory.initDriver();
         driver = DriverFactory.getDriver();
-        driver.get("file:///Users/kiruthika/Downloads/selenium_practice.html");
+        // Resolve the HTML file relative to the project, so it works both locally and in CI
+        String htmlPath = System.getProperty("test.page.url",
+                "file://" + System.getProperty("user.dir") + "/src/test/resources/selenium_practice.html");
+        driver.get(htmlPath);
         driver.manage().window().maximize();
         context.setAttribute("driver", driver);
     }

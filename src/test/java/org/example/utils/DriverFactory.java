@@ -2,6 +2,7 @@ package org.example.utils;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverFactory {
 
@@ -10,7 +11,18 @@ public class DriverFactory {
     public static void initDriver() {
 
         if (driver.get() == null) {
-            driver.set(new ChromeDriver());
+            ChromeOptions options = new ChromeOptions();
+
+            // Run headless when the system property is set (e.g., in CI)
+            if (Boolean.parseBoolean(System.getProperty("headless", "false"))) {
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--disable-gpu");
+                options.addArguments("--window-size=1920,1080");
+            }
+
+            driver.set(new ChromeDriver(options));
             driver.get().manage().window().maximize();
         }
     }
