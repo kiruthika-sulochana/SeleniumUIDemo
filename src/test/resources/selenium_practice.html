@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selenium Practice Lab — Beginner to Senior</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --accent3: #a8ff3e;
+    --accent4: #bf5af2;
+    --text: #e8e8f0;
+    --text-muted: #666680;
+    --success: #30d158;
+    --warning: #ffd60a;
+    --error: #ff453a;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --display: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0a0a0f 0%, #111128 50%, #0a0a0f 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 60% 50%, rgba(0,229,255,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 50%, rgba(191,90,242,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  header h1 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent4) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    font-family: var(--mono);
+  }
+  .badge-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .badge-beginner { color: var(--success); border-color: var(--success); background: rgba(48,209,88,0.08); }
+  .badge-intermediate { color: var(--warning); border-color: var(--warning); background: rgba(255,214,10,0.08); }
+  .badge-advanced { color: var(--accent2); border-color: var(--accent2); background: rgba(255,107,53,0.08); }
+  .badge-senior { color: var(--accent4); border-color: var(--accent4); background: rgba(191,90,242,0.08); }
+
+  /* NAV */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* LAYOUT */
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  /* SECTION TITLES */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-level {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .level-1 { background: rgba(48,209,88,0.15); color: var(--success); }
+  .level-2 { background: rgba(255,214,10,0.15); color: var(--warning); }
+  .level-3 { background: rgba(255,107,53,0.15); color: var(--accent2); }
+  .level-4 { background: rgba(191,90,242,0.15); color: var(--accent4); }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-desc {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  /* PRACTICE CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #3a3a50; }
+  .card-title {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-hint {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--surface2);
+    border-radius: 6px;
+    border-left: 2px solid var(--accent);
+  }
+  .card-hint code { color: var(--accent3); }
+
+  /* FORM ELEMENTS */
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+    font-family: var(--mono);
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 0.65rem 0.9rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,255,0.1);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #00ccee; transform: translateY(-1px); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: var(--error); color: #fff; }
+  .btn-danger:hover { background: #e03030; }
+  .btn-success { background: var(--success); color: #000; }
+  .btn-warning { background: var(--warning); color: #000; }
+
+  .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+  /* OUTPUT / RESULT BOX */
+  .result-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent3);
+    margin-top: 1rem;
+    min-height: 2.5rem;
+    word-break: break-all;
+  }
+  .result-box.hidden { display: none; }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .data-table th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+
+  /* TABS */
+  .tab-nav { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.65rem 1.25rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ACCORDION */
+  .accordion-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+  .accordion-header {
+    background: var(--surface2);
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text);
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: background 0.2s;
+  }
+  .accordion-header:hover { background: #222235; }
+  .accordion-body { display: none; padding: 1rem 1.25rem; font-size: 0.9rem; color: var(--text-muted); background: var(--surface); }
+  .accordion-body.open { display: block; }
+  .accordion-arrow { transition: transform 0.2s; font-size: 0.7rem; color: var(--accent); }
+  .accordion-arrow.open { transform: rotate(180deg); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+  }
+  .modal h3 { font-family: var(--display); font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--accent); }
+  .modal p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 1.25rem;
+  }
+
+  /* ALERT */
+  .alert {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .alert-success { background: rgba(48,209,88,0.1); border-color: var(--success); color: var(--success); }
+  .alert-warning { background: rgba(255,214,10,0.1); border-color: var(--warning); color: var(--warning); }
+  .alert-error   { background: rgba(255,69,58,0.1);  border-color: var(--error);   color: var(--error); }
+  .alert-info    { background: rgba(0,229,255,0.1);  border-color: var(--accent);  color: var(--accent); }
+
+  /* PROGRESS */
+  .progress-wrap { background: var(--surface2); border-radius: 999px; height: 10px; overflow: hidden; margin: 0.5rem 0 1rem; }
+  .progress-bar  { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent4)); transition: width 0.5s ease; }
+
+  /* DRAG & DROP */
+  .drag-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .drag-zone.dragover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.04); }
+  .drag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    margin: 0.3rem;
+    cursor: grab;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text);
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .drag-item:active { cursor: grabbing; }
+  .drag-item.dragging { opacity: 0.4; }
+
+  /* CANVAS */
+  canvas {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: block;
+    cursor: crosshair;
+  }
+
+  /* SPINNER */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+  }
+
+  /* TOOLTIP */
+  .has-tooltip { position: relative; display: inline-block; }
+  .tooltip {
+    visibility: hidden;
+    opacity: 0;
+    background: #222235;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 50;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .has-tooltip:hover .tooltip { visibility: visible; opacity: 1; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+  /* CHECKBOX & RADIO */
+  .check-group, .radio-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .check-item, .radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  input[type="checkbox"], input[type="radio"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    margin: 0;
+  }
+
+  /* SLIDER */
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    background: none;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  /* IFRAME */
+  iframe.practice-frame {
+    width: 100%;
+    height: 200px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface2);
+  }
+
+  /* SHADOW DOM marker */
+  .shadow-host {
+    border: 2px dashed var(--accent4);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  /* INFINITE SCROLL */
+  #infinite-list { max-height: 250px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; }
+  .list-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .list-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+  }
+
+  /* CODE block */
+  .code-block {
+    background: #0d0d15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent3);
+    overflow-x: auto;
+    line-height: 1.7;
+    margin-top: 0.5rem;
+  }
+
+  /* PAGINATION */
+  .pagination { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1rem; }
+  .page-btn {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .page-btn:hover, .page-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* CONTEXT MENU */
+  .context-zone {
+    height: 80px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    cursor: context-menu;
+  }
+  #context-menu {
+    display: none;
+    position: fixed;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 9999;
+    overflow: hidden;
+    min-width: 160px;
+  }
+  #context-menu ul { list-style: none; }
+  #context-menu li {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  #context-menu li:hover { background: var(--surface2); color: var(--accent); }
+
+  /* BROKEN IMAGE */
+  .broken-img { width: 80px; height: 80px; border: 1px solid var(--border); border-radius: 6px; }
+
+  /* HIDDEN elements for practice */
+  .hidden-by-class { display: none; }
+  .opacity-zero { opacity: 0; }
+  .off-screen { position: absolute; left: -9999px; }
+
+  /* AUTOCOMPLETE */
+  .autocomplete-wrap { position: relative; }
+  #autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    z-index: 200;
+    max-height: 180px;
+    overflow-y: auto;
+    display: none;
+  }
+  .ac-item {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ac-item:hover { background: var(--surface2); color: var(--accent); }
+
+  /* RATING STARS */
+  .star-rating { display: flex; gap: 0.25rem; flex-direction: row-reverse; justify-content: flex-end; }
+  .star-rating input { display: none; }
+  .star-rating label { font-size: 1.5rem; cursor: pointer; color: var(--border); transition: color 0.15s; }
+  .star-rating input:checked ~ label,
+  .star-rating label:hover,
+  .star-rating label:hover ~ label { color: var(--warning); }
+
+  /* STATUS INDICATOR */
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.4rem; }
+  .dot-online { background: var(--success); box-shadow: 0 0 6px var(--success); }
+  .dot-offline { background: var(--error); }
+  .dot-busy { background: var(--warning); }
+
+  /* STEPPER */
+  .stepper { display: flex; align-items: center; gap: 0; }
+  .step-btn {
+    width: 36px; height: 36px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .step-btn:first-child { border-radius: 8px 0 0 8px; }
+  .step-btn:last-child { border-radius: 0 8px 8px 0; }
+  .step-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .step-value {
+    padding: 0 1rem;
+    border: 1px solid var(--border);
+    border-left: none; border-right: none;
+    background: var(--surface);
+    height: 36px;
+    display: flex; align-items: center;
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    min-width: 60px;
+    justify-content: center;
+  }
+
+  /* COUNTDOWN */
+  .countdown-display {
+    font-family: var(--mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  /* TYPING ANIMATION */
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .typed-text::after { content: '|'; animation: blink 1s infinite; color: var(--accent); }
+
+  /* SKELETON */
+  @keyframes shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface2) 25%, #222235 50%, var(--surface2) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+  }
+  .skel-line { height: 14px; margin-bottom: 0.6rem; }
+  .skel-avatar { width: 48px; height: 48px; border-radius: 50%; }
+
+  /* CHARTS (CSS only) */
+  .bar-chart { display: flex; align-items: flex-end; gap: 0.5rem; height: 120px; }
+  .bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--accent), var(--accent4));
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease;
+    position: relative;
+  }
+  .bar-label { text-align: center; font-family: var(--mono); font-size: 0.65rem; color: var(--text-muted); margin-top: 0.35rem; }
+
+  /* COOKIE BANNER */
+  #cookie-banner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    z-index: 999;
+    font-size: 0.85rem;
+  }
+  #cookie-banner.hidden { display: none; }
+
+  /* TOAST */
+  #toast-container {
+    position: fixed;
+    top: 1.5rem; right: 1.5rem;
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .toast {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    min-width: 220px;
+    animation: slideIn 0.3s ease;
+    border-left: 3px solid var(--accent);
+  }
+  @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+  /* SCROLL TO TOP */
+  #scroll-top {
+    position: fixed;
+    bottom: 5rem; right: 1.5rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 42px; height: 42px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #scroll-top.visible { opacity: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    main { padding: 1rem; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <h1>Selenium Practice Lab</h1>
+  <p>// complete playground · beginner → senior (10yr)</p>
+  <div class="badge-row">
+    <span class="badge badge-beginner">🟢 Beginner</span>
+    <span class="badge badge-intermediate">🟡 Intermediate</span>
+    <span class="badge badge-advanced">🟠 Advanced</span>
+    <span class="badge badge-senior">🟣 Senior</span>
+  </div>
+</header>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="#locators">Locators</a>
+  <a href="#forms">Forms</a>
+  <a href="#interactions">Interactions</a>
+  <a href="#waits">Waits</a>
+  <a href="#tables">Tables</a>
+  <a href="#windows">Windows</a>
+  <a href="#alerts">JS Alerts</a>
+  <a href="#frames">Frames</a>
+  <a href="#advanced">Advanced</a>
+  <a href="#senior">Senior</a>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+<!-- ==================== SECTION 1: ELEMENT LOCATORS ==================== -->
+<section id="locators">
+  <div class="section-header">
+    <span class="section-level level-1">Level 1</span>
+    <div>
+      <div class="section-title">Element Locators</div>
+      <div class="section-desc">id · name · class · tag · css · xpath · linkText · partialLinkText</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🎯 By ID</div>
+      <div class="card-hint">Use: <code>driver.find_element(By.ID, "username-field")</code></div>
+      <label for="username-field">Username</label>
+      <input type="text" id="username-field" name="username" placeholder="Enter username" autocomplete="off">
+      <label for="email-field">Email</label>
+      <input type="email" id="email-field" name="email" placeholder="user@example.com">
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏷️ By Name & Class</div>
+      <div class="card-hint">Use: <code>By.NAME, "search-box"</code> or <code>By.CLASS_NAME</code></div>
+      <input type="search" name="search-box" class="search-input primary-search" placeholder="Search...">
+      <div style="margin-top:0.5rem">
+        <span class="status-dot dot-online"></span><span class="user-status online-user">Online User</span>
+        <span class="status-dot dot-offline" style="margin-left:1rem"></span><span class="user-status offline-user">Offline User</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔗 Links</div>
+      <div class="card-hint">Use: <code>By.LINK_TEXT</code> · <code>By.PARTIAL_LINK_TEXT</code></div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem">
+        <a href="#" id="home-link" class="nav-link" style="color:var(--accent)">Home Page</a>
+        <a href="#" id="about-link" class="nav-link" style="color:var(--accent)">About Us</a>
+        <a href="#" id="contact-link" class="nav-link" style="color:var(--accent)">Contact Support Team</a>
+        <a href="#" id="docs-link" class="nav-link" style="color:var(--accent)">View Documentation</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🧬 CSS & XPath</div>
+      <div class="card-hint">CSS: <code>div.card > p.desc</code> · XPath: <code>//button[@data-action='submit']</code></div>
+      <div id="xpath-target" class="nested-container">
+        <div class="outer-div">
+          <p class="desc" data-index="1">First paragraph with <strong>bold text</strong></p>
+          <p class="desc secondary" data-index="2">Second paragraph</p>
+          <ul id="feature-list">
+            <li class="feature-item" data-feature="fast">Fast Performance</li>
+            <li class="feature-item" data-feature="secure">Secure by Default</li>
+            <li class="feature-item active" data-feature="scalable">Scalable Architecture</li>
+          </ul>
+        </div>
+      </div>
+      <button class="btn btn-primary" data-action="submit" id="submit-btn" style="margin-top:0.75rem">Submit Form</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 2: FORMS ==================== -->
+<section id="forms">
+  <div class="section-header">
+    <span class="section-level level-1">Level 2</span>
+    <div>
+      <div class="section-title">Form Interactions</div>
+      <div class="section-desc">input · select · checkbox · radio · file · date · range · textarea</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📝 Complete Registration Form</div>
+    <div class="card-hint">Practice: <code>send_keys()</code> · <code>click()</code> · <code>Select()</code> · <code>clear()</code></div>
+    <div class="grid-2">
+      <div>
+        <label for="reg-first">First Name *</label>
+        <input type="text" id="reg-first" name="firstName" placeholder="John" required>
+
+        <label for="reg-last">Last Name *</label>
+        <input type="text" id="reg-last" name="lastName" placeholder="Doe" required>
+
+        <label for="reg-email">Email *</label>
+        <input type="email" id="reg-email" name="regEmail" placeholder="john@example.com" required>
+
+        <label for="reg-password">Password *</label>
+        <input type="password" id="reg-password" name="regPassword" placeholder="Min 8 characters">
+
+        <label for="reg-phone">Phone</label>
+        <input type="tel" id="reg-phone" name="phone" placeholder="+91 9876543210">
+
+        <label for="reg-dob">Date of Birth</label>
+        <input type="date" id="reg-dob" name="dob">
+      </div>
+      <div>
+        <label for="reg-country">Country</label>
+        <select id="reg-country" name="country">
+          <option value="">-- Select Country --</option>
+          <option value="IN">India</option>
+          <option value="US">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="AU">Australia</option>
+          <option value="CA">Canada</option>
+          <option value="DE">Germany</option>
+          <option value="JP">Japan</option>
+        </select>
+
+        <label for="reg-city">City</label>
+        <select id="reg-city" name="city" disabled>
+          <option value="">-- Select City --</option>
+        </select>
+
+        <label for="reg-role">Role</label>
+        <select id="reg-role" name="role" multiple size="4" style="height:auto">
+          <option value="dev">Developer</option>
+          <option value="qa">QA Engineer</option>
+          <option value="devops">DevOps</option>
+          <option value="pm">Product Manager</option>
+          <option value="design">Designer</option>
+        </select>
+
+        <label style="margin-top:0.75rem">Gender</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="gender" id="gender-male" value="male"> Male</label>
+          <label class="radio-item"><input type="radio" name="gender" id="gender-female" value="female"> Female</label>
+          <label class="radio-item"><input type="radio" name="gender" id="gender-other" value="other"> Other</label>
+        </div>
+      </div>
+    </div>
+
+    <label style="margin-top:1rem">Skills</label>
+    <div class="check-group" style="flex-direction:row;flex-wrap:wrap;gap:1rem">
+      <label class="check-item"><input type="checkbox" id="skill-selenium" name="skills" value="selenium"> Selenium</label>
+      <label class="check-item"><input type="checkbox" id="skill-python" name="skills" value="python"> Python</label>
+      <label class="check-item"><input type="checkbox" id="skill-java" name="skills" value="java"> Java</label>
+      <label class="check-item"><input type="checkbox" id="skill-js" name="skills" value="js"> JavaScript</label>
+      <label class="check-item"><input type="checkbox" id="skill-api" name="skills" value="api"> API Testing</label>
+    </div>
+
+    <label style="margin-top:1rem">Experience Level: <span id="exp-value">3</span> years</label>
+    <input type="range" id="exp-slider" name="experience" min="0" max="15" value="3" oninput="document.getElementById('exp-value').textContent=this.value">
+
+    <label style="margin-top:1rem">Bio</label>
+    <textarea id="reg-bio" name="bio" placeholder="Tell us about yourself..."></textarea>
+
+    <label for="reg-file">Upload Resume (PDF)</label>
+    <input type="file" id="reg-file" name="resume" accept=".pdf,.doc,.docx" style="color:var(--text-muted)">
+
+    <label for="reg-url">Portfolio URL</label>
+    <input type="url" id="reg-url" name="portfolio" placeholder="https://yourportfolio.com">
+
+    <label><input type="checkbox" id="terms-check" name="terms" style="width:auto;margin:0"> &nbsp;I agree to Terms &amp; Conditions</label>
+    <label style="margin-top:0.5rem"><input type="checkbox" id="newsletter-check" name="newsletter" style="width:auto;margin:0"> &nbsp;Subscribe to newsletter</label>
+
+    <div class="btn-row" style="margin-top:1.25rem">
+      <button class="btn btn-primary" id="reg-submit" type="button" onclick="handleRegSubmit()">Register</button>
+      <button class="btn btn-secondary" id="reg-reset" type="button" onclick="document.getElementById('reg-form-result').textContent='Form Reset'; document.querySelectorAll('input[type=text],input[type=email],input[type=password],input[type=tel],input[type=url],textarea').forEach(el=>el.value='')">Reset</button>
+    </div>
+    <div class="result-box" id="reg-form-result"></div>
+  </div>
+
+  <!-- AUTOCOMPLETE -->
+  <div class="card">
+    <div class="card-title">🔍 Autocomplete / Typeahead</div>
+    <div class="card-hint">Type a framework name. Practice: wait for suggestions → click item</div>
+    <div class="autocomplete-wrap">
+      <input type="text" id="ac-input" placeholder="Type: sel, cyp, play..." oninput="showAutocomplete(this.value)" onblur="setTimeout(()=>document.getElementById('autocomplete-list').style.display='none',200)" autocomplete="off">
+      <div id="autocomplete-list"></div>
+    </div>
+    <div class="result-box" id="ac-result"></div>
+  </div>
+
+  <!-- STEPPER & RATING -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">➕ Number Stepper</div>
+      <div class="card-hint">Practice: click increment/decrement buttons</div>
+      <div class="stepper" id="stepper-wrap">
+        <button class="step-btn" id="stepper-dec" onclick="stepperChange(-1)">−</button>
+        <div class="step-value" id="stepper-val">1</div>
+        <button class="step-btn" id="stepper-inc" onclick="stepperChange(1)">+</button>
+      </div>
+      <div class="result-box" id="stepper-result" style="margin-top:0.75rem"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⭐ Star Rating</div>
+      <div class="card-hint">Click stars. Practice: radio buttons as visual stars</div>
+      <div class="star-rating" id="star-rating">
+        <input type="radio" name="rating" id="star5" value="5"><label for="star5" title="5 stars">★</label>
+        <input type="radio" name="rating" id="star4" value="4"><label for="star4" title="4 stars">★</label>
+        <input type="radio" name="rating" id="star3" value="3"><label for="star3" title="3 stars">★</label>
+        <input type="radio" name="rating" id="star2" value="2"><label for="star2" title="2 stars">★</label>
+        <input type="radio" name="rating" id="star1" value="1"><label for="star1" title="1 star">★</label>
+      </div>
+      <div class="result-box" id="rating-result" style="margin-top:0.75rem"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 3: INTERACTIONS ==================== -->
+<section id="interactions">
+  <div class="section-header">
+    <span class="section-level level-2">Level 3</span>
+    <div>
+      <div class="section-title">Mouse & Keyboard Interactions</div>
+      <div class="section-desc">hover · double-click · right-click · drag-drop · key-combos · ActionChains</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🖱️ Mouse Events</div>
+      <div class="card-hint">Practice: <code>ActionChains</code> · <code>move_to_element()</code> · <code>double_click()</code></div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        <button class="btn btn-secondary" id="btn-hover" onmouseenter="showEvent('hover-result','mouseenter on hover button')" onmouseleave="showEvent('hover-result','mouseleave on hover button')">Hover Over Me</button>
+        <button class="btn btn-secondary" id="btn-dblclick" ondblclick="showEvent('hover-result','Double-click detected! ✓')">Double Click Me</button>
+        <button class="btn btn-secondary" id="btn-rightclick" oncontextmenu="event.preventDefault();showEvent('hover-result','Right-click detected! ✓')">Right Click Me</button>
+        <button class="btn btn-secondary" id="btn-longpress" onmousedown="startLong()" onmouseup="endLong()" ontouchstart="startLong()" ontouchend="endLong()">Hold Me (Long Press)</button>
+      </div>
+      <div class="result-box" id="hover-result"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⌨️ Keyboard Shortcuts</div>
+      <div class="card-hint">Practice: <code>Keys.CONTROL</code> · <code>send_keys(Keys.TAB)</code></div>
+      <input type="text" id="key-input" placeholder="Type here and press keys..." onkeydown="captureKey(event)">
+      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.25rem">
+        <small style="color:var(--text-muted);font-family:var(--mono);font-size:0.72rem">Try: Tab · Enter · Escape · Ctrl+A · Ctrl+C</small>
+        <button class="btn btn-secondary btn-sm" id="select-all-btn" onclick="selectAll()">Select All (Ctrl+A)</button>
+        <button class="btn btn-secondary btn-sm" id="clear-input-btn" onclick="clearInput()">Clear Input</button>
+      </div>
+      <div class="result-box" id="key-result"></div>
+    </div>
+  </div>
+
+  <!-- DRAG & DROP -->
+  <div class="card">
+    <div class="card-title">🎲 Drag & Drop</div>
+    <div class="card-hint">Practice: <code>drag_and_drop(source, target)</code> · <code>ActionChains</code></div>
+    <div class="grid-2">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);margin-bottom:0.5rem">SOURCE — drag items:</div>
+        <div id="drag-source">
+          <div class="drag-item" id="drag-item-1" draggable="true" ondragstart="dragStart(event,'drag-item-1')">🔴 Item Alpha</div>
+          <div class="drag-item" id="drag-item-2" draggable="true" ondragstart="dragStart(event,'drag-item-2')">🟡 Item Beta</div>
+          <div class="drag-item" id="drag-item-3" draggable="true" ondragstart="dragStart(event,'drag-item-3')">🟢 Item Gamma</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);margin-bottom:0.5rem">TARGET — drop here:</div>
+        <div class="drag-zone" id="drag-target" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="dropItem(event)">
+          Drop items here
+        </div>
+      </div>
+    </div>
+    <div class="result-box" id="drag-result"></div>
+  </div>
+
+  <!-- SLIDER INTERACTION -->
+  <div class="card">
+    <div class="card-title">🎚️ Sliders & Range</div>
+    <div class="card-hint">Practice: <code>ActionChains</code> with click_and_hold + move</div>
+    <label>Price Range: $<span id="price-min">0</span> – $<span id="price-max">500</span></label>
+    <input type="range" id="price-slider-min" min="0" max="1000" value="0" oninput="document.getElementById('price-min').textContent=this.value">
+    <input type="range" id="price-slider-max" min="0" max="1000" value="500" oninput="document.getElementById('price-max').textContent=this.value">
+  </div>
+</section>
+
+<!-- ==================== SECTION 4: WAITS & DYNAMIC CONTENT ==================== -->
+<section id="waits">
+  <div class="section-header">
+    <span class="section-level level-2">Level 4</span>
+    <div>
+      <div class="section-title">Waits & Dynamic Content</div>
+      <div class="section-desc">implicit · explicit · fluent waits · EC conditions · async loading</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">⏱️ Delayed Element Appearance</div>
+      <div class="card-hint">Use: <code>WebDriverWait(driver, 10).until(EC.presence_of_element_located(...))</code></div>
+      <button class="btn btn-primary" id="load-btn" onclick="loadDelayed()">Load Element (3s delay)</button>
+      <div id="delayed-container" style="margin-top:0.75rem"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔄 Loading Spinner</div>
+      <div class="card-hint">Use: <code>EC.invisibility_of_element_located()</code> to wait for spinner to disappear</div>
+      <button class="btn btn-secondary" id="spinner-btn" onclick="showSpinner()">Start Loading</button>
+      <div id="spinner-zone" style="margin-top:0.75rem;min-height:40px;display:flex;align-items:center;gap:0.75rem">
+        <div id="spinner-el" class="spinner" style="display:none"></div>
+        <span id="spinner-text" style="font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)"></span>
+      </div>
+      <div id="spinner-done" style="display:none" class="alert alert-success">✓ Content Loaded Successfully</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎭 Element State Changes</div>
+      <div class="card-hint">Use: <code>EC.element_to_be_clickable()</code> · <code>EC.text_to_be_present_in_element()</code></div>
+      <button class="btn btn-secondary" id="enable-btn" onclick="toggleButtonState()">Enable Submit Button</button>
+      <button class="btn btn-primary" id="state-submit" disabled style="margin-top:0.5rem;opacity:0.4">Submit (Disabled)</button>
+      <div id="state-text" style="margin-top:0.5rem;font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">Status: disabled</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌀 AJAX / Fetch Simulation</div>
+      <div class="card-hint">Use: <code>EC.presence_of_element_located()</code> after triggering AJAX</div>
+      <button class="btn btn-secondary" id="ajax-btn" onclick="simulateAjax()">Fetch Data (AJAX)</button>
+      <div id="ajax-result-zone" style="margin-top:0.75rem"></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="card">
+    <div class="card-title">📊 Progress Bar (Animated)</div>
+    <div class="card-hint">Use: <code>EC.text_to_be_present_in_element()</code> to wait until 100%</div>
+    <button class="btn btn-primary" id="progress-btn" onclick="startProgress()">Start Progress</button>
+    <div class="progress-wrap" style="margin-top:1rem">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+    <div id="progress-text" style="font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">0%</div>
+  </div>
+
+  <!-- COUNTDOWN TIMER -->
+  <div class="card">
+    <div class="card-title">⏰ Countdown Timer</div>
+    <div class="card-hint">Wait for element text to become "00:00"</div>
+    <div class="countdown-display" id="countdown">00:10</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="countdown-start" onclick="startCountdown()">Start</button>
+      <button class="btn btn-secondary" id="countdown-reset" onclick="resetCountdown()">Reset</button>
+    </div>
+    <div id="countdown-done" class="alert alert-warning" style="display:none;margin-top:0.75rem">⚠️ Time's Up!</div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 5: TABLES ==================== -->
+<section id="tables">
+  <div class="section-header">
+    <span class="section-level level-2">Level 5</span>
+    <div>
+      <div class="section-title">Tables & Data Grids</div>
+      <div class="section-desc">static · sortable · paginated · filterable · editable tables</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Static Data Table</div>
+    <div class="card-hint">Practice: XPath row/column navigation · <code>//table[@id='emp-table']//tr[3]/td[2]</code></div>
+    <div style="overflow-x:auto">
+      <table class="data-table" id="emp-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Department</th><th>Salary</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="emp-tbody">
+          <tr><td>001</td><td>Alice Johnson</td><td>Engineering</td><td>$95,000</td><td><span class="status-dot dot-online"></span>Active</td><td><button class="btn btn-secondary" onclick="tableAction('Edit','Alice Johnson')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Edit</button> <button class="btn btn-danger" onclick="tableAction('Delete','Alice Johnson')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Del</button></td></tr>
+          <tr><td>002</td><td>Bob Martinez</td><td>Marketing</td><td>$72,000</td><td><span class="status-dot dot-online"></span>Active</td><td><button class="btn btn-secondary" onclick="tableAction('Edit','Bob Martinez')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Edit</button> <button class="btn btn-danger" onclick="tableAction('Delete','Bob Martinez')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Del</button></td></tr>
+          <tr><td>003</td><td>Carol White</td><td>QA</td><td>$85,000</td><td><span class="status-dot dot-busy"></span>On Leave</td><td><button class="btn btn-secondary" onclick="tableAction('Edit','Carol White')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Edit</button> <button class="btn btn-danger" onclick="tableAction('Delete','Carol White')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Del</button></td></tr>
+          <tr><td>004</td><td>David Kim</td><td>DevOps</td><td>$105,000</td><td><span class="status-dot dot-online"></span>Active</td><td><button class="btn btn-secondary" onclick="tableAction('Edit','David Kim')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Edit</button> <button class="btn btn-danger" onclick="tableAction('Delete','David Kim')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Del</button></td></tr>
+          <tr><td>005</td><td>Eva Singh</td><td>Product</td><td>$90,000</td><td><span class="status-dot dot-offline"></span>Inactive</td><td><button class="btn btn-secondary" onclick="tableAction('Edit','Eva Singh')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Edit</button> <button class="btn btn-danger" onclick="tableAction('Delete','Eva Singh')" style="padding:0.25rem 0.6rem;font-size:0.7rem">Del</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="result-box" id="table-result"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔍 Filterable & Sortable Table</div>
+    <div class="card-hint">Filter input + sortable headers. Practice complex XPath with filters.</div>
+    <input type="text" id="table-filter" placeholder="Filter by name..." oninput="filterTable(this.value)" style="margin-bottom:0.75rem">
+    <div style="overflow-x:auto">
+      <table class="data-table" id="sort-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)" style="cursor:pointer">Name ↕</th>
+            <th onclick="sortTable(1)" style="cursor:pointer">Score ↕</th>
+            <th onclick="sortTable(2)" style="cursor:pointer">Level ↕</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody id="sort-tbody">
+          <tr><td>Selenium</td><td>95</td><td>Expert</td><td><span style="background:rgba(0,229,255,0.15);color:var(--accent);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.7rem">automation</span></td></tr>
+          <tr><td>Cypress</td><td>88</td><td>Advanced</td><td><span style="background:rgba(168,255,62,0.15);color:var(--accent3);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.7rem">e2e</span></td></tr>
+          <tr><td>Playwright</td><td>91</td><td>Expert</td><td><span style="background:rgba(191,90,242,0.15);color:var(--accent4);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.7rem">modern</span></td></tr>
+          <tr><td>Appium</td><td>78</td><td>Intermediate</td><td><span style="background:rgba(255,107,53,0.15);color:var(--accent2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.7rem">mobile</span></td></tr>
+          <tr><td>TestNG</td><td>82</td><td>Advanced</td><td><span style="background:rgba(48,209,88,0.15);color:var(--success);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.7rem">java</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination" id="pagination">
+      <button class="page-btn" id="prev-page" disabled>« Prev</button>
+      <button class="page-btn active" id="page-1">1</button>
+      <button class="page-btn" id="page-2">2</button>
+      <button class="page-btn" id="page-3">3</button>
+      <button class="page-btn" id="next-page">Next »</button>
+    </div>
+  </div>
+
+  <!-- INFINITE SCROLL -->
+  <div class="card">
+    <div class="card-title">♾️ Infinite Scroll List</div>
+    <div class="card-hint">Scroll to bottom → more items load. Practice: <code>execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", element)</code></div>
+    <div id="infinite-list" onscroll="checkInfiniteScroll(this)">
+      <!-- filled by JS -->
+    </div>
+    <div id="loading-more" style="text-align:center;padding:0.5rem;font-family:var(--mono);font-size:0.75rem;color:var(--text-muted);display:none">Loading more...</div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 6: WINDOWS & TABS ==================== -->
+<section id="windows">
+  <div class="section-header">
+    <span class="section-level level-3">Level 6</span>
+    <div>
+      <div class="section-title">Windows, Tabs & Popups</div>
+      <div class="section-desc">window handles · new tab · popup window · switch_to · scroll</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🪟 New Tab / Window</div>
+      <div class="card-hint">Use: <code>driver.switch_to.window(handle)</code></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="open-tab" onclick="openNewTab()">Open New Tab</button>
+        <button class="btn btn-secondary" id="open-window" onclick="openNewWindow()">Open New Window</button>
+      </div>
+      <div class="result-box" id="window-result" style="margin-top:0.75rem">Click buttons above. Practice switching between window handles.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📤 Popup Window</div>
+      <div class="card-hint">Use: <code>driver.switch_to.window()</code> to handle popup</div>
+      <button class="btn btn-secondary" id="popup-btn" onclick="openPopup()">Open Popup (350×250)</button>
+      <div class="result-box" style="margin-top:0.75rem">Popup has form elements to interact with.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📜 Scroll Practice</div>
+    <div class="card-hint">Practice: <code>execute_script("window.scrollTo(0, document.body.scrollHeight)")</code> · scroll into view</div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Scroll to Top</button>
+      <button class="btn btn-secondary" id="scroll-bottom-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">Scroll to Bottom</button>
+      <button class="btn btn-secondary" id="scroll-into-view-btn" onclick="document.getElementById('senior').scrollIntoView({behavior:'smooth'})">Scroll to Senior Section</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 7: ALERTS ==================== -->
+<section id="alerts">
+  <div class="section-header">
+    <span class="section-level level-3">Level 7</span>
+    <div>
+      <div class="section-title">JavaScript Alerts & Dialogs</div>
+      <div class="section-desc">alert · confirm · prompt · switch_to.alert · accept · dismiss</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚨 Alert Types</div>
+    <div class="card-hint">Use: <code>driver.switch_to.alert</code> · <code>.accept()</code> · <code>.dismiss()</code> · <code>.send_keys()</code></div>
+    <div class="btn-row">
+      <button class="btn btn-warning" id="simple-alert-btn" onclick="showAlert()">Simple Alert</button>
+      <button class="btn btn-secondary" id="confirm-alert-btn" onclick="showConfirm()">Confirm Dialog</button>
+      <button class="btn btn-secondary" id="prompt-alert-btn" onclick="showPrompt()">Prompt Dialog</button>
+      <button class="btn btn-primary" id="timed-alert-btn" onclick="timedAlert()">Alert in 3s</button>
+    </div>
+    <div class="result-box" id="alert-result"></div>
+
+    <!-- CUSTOM MODAL (non-native) -->
+    <div style="margin-top:1rem">
+      <div class="card-title">🗂️ Custom Modal Dialog</div>
+      <div class="card-hint">Practice: click to open → interact → close. Not a native JS alert.</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="modal-open-btn" onclick="document.getElementById('main-modal').classList.add('open')">Open Modal</button>
+        <button class="btn btn-secondary" id="modal-confirm-btn" onclick="modalAction('confirm')">Pre-confirm</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="main-modal">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" id="modal-close-btn" onclick="document.getElementById('main-modal').classList.remove('open')" aria-label="Close">✕</button>
+    <h3>Confirm Action</h3>
+    <p>Are you sure you want to proceed? This modal tests your ability to interact with overlay dialogs in Selenium.</p>
+    <input type="text" id="modal-input" placeholder="Enter confirmation text..." style="margin-bottom:1rem">
+    <div class="btn-row">
+      <button class="btn btn-primary" id="modal-confirm-action" onclick="modalAction('confirmed')">Confirm</button>
+      <button class="btn btn-secondary" id="modal-cancel" onclick="document.getElementById('main-modal').classList.remove('open')">Cancel</button>
+    </div>
+    <div id="modal-result" style="margin-top:0.75rem;font-family:var(--mono);font-size:0.8rem;color:var(--accent3)"></div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 8: FRAMES ==================== -->
+<section id="frames">
+  <div class="section-header">
+    <span class="section-level level-3">Level 8</span>
+    <div>
+      <div class="section-title">Frames & iFrames</div>
+      <div class="section-desc">switch_to.frame() · switch_to.default_content() · nested frames</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🖼️ iFrame Practice</div>
+    <div class="card-hint">Use: <code>driver.switch_to.frame("practice-iframe")</code> then interact with elements inside</div>
+    <iframe id="practice-iframe" name="practice-iframe" class="practice-frame" srcdoc="
+      <html><head><style>
+        body{margin:0;padding:1rem;background:#111118;color:#e8e8f0;font-family:monospace;}
+        input{width:100%;background:#1a1a24;border:1px solid #2a2a3a;border-radius:6px;color:#e8e8f0;padding:0.5rem;margin-bottom:0.75rem;box-sizing:border-box;}
+        button{background:#00e5ff;color:#000;border:none;border-radius:6px;padding:0.5rem 1rem;cursor:pointer;font-weight:700;font-size:0.8rem;}
+        label{color:#666680;font-size:0.75rem;display:block;margin-bottom:0.25rem;}
+        h4{color:#00e5ff;margin-bottom:1rem;font-size:0.9rem;}
+      </style></head><body>
+        <h4>⚡ Inside iFrame</h4>
+        <label for='iframe-name'>Name</label>
+        <input type='text' id='iframe-name' placeholder='Type inside iframe'>
+        <label for='iframe-msg'>Message</label>
+        <input type='text' id='iframe-msg' placeholder='Another field'>
+        <button id='iframe-btn' onclick='document.getElementById(\"iframe-result\").textContent=\"Button clicked inside iframe!\"'>Click Inside iFrame</button>
+        <p id='iframe-result' style='color:#a8ff3e;margin-top:0.5rem;font-size:0.8rem'></p>
+      </body></html>
+    "></iframe>
+    <div class="code-block" style="margin-top:0.75rem">
+# Switch to frame and interact<br>
+driver.switch_to.frame("practice-iframe")<br>
+driver.find_element(By.ID, "iframe-name").send_keys("Hello")<br>
+driver.find_element(By.ID, "iframe-btn").click()<br>
+driver.switch_to.default_content()  # Switch back
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 9: ADVANCED ==================== -->
+<section id="advanced">
+  <div class="section-header">
+    <span class="section-level level-3">Level 9</span>
+    <div>
+      <div class="section-title">Advanced Patterns</div>
+      <div class="section-desc">tabs · accordions · tooltips · context menu · notifications · canvas · screenshots</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="card">
+    <div class="card-title">📂 Tabbed Interface</div>
+    <div class="card-hint">Practice: click tab → verify active tab content changes</div>
+    <div class="tab-nav" id="tab-nav" role="tablist">
+      <button class="tab-btn active" id="tab-btn-overview" role="tab" onclick="switchTab('overview')">Overview</button>
+      <button class="tab-btn" id="tab-btn-details" role="tab" onclick="switchTab('details')">Details</button>
+      <button class="tab-btn" id="tab-btn-logs" role="tab" onclick="switchTab('logs')">Logs</button>
+      <button class="tab-btn" id="tab-btn-settings" role="tab" onclick="switchTab('settings')">Settings</button>
+    </div>
+    <div class="tab-panel active" id="tab-overview">
+      <div id="overview-content">
+        <p style="color:var(--text-muted)">Overview panel is active. This text is visible when the Overview tab is selected.</p>
+        <div class="alert alert-info">ℹ️ Tab ID: <strong>tab-overview</strong></div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-details">
+      <p style="color:var(--text-muted)">Details panel. Contains detailed info about the selected item.</p>
+      <div class="alert alert-success">✓ Tab ID: <strong>tab-details</strong></div>
+    </div>
+    <div class="tab-panel" id="tab-logs">
+      <div class="code-block" id="log-output">
+        [INFO] 2026-05-23 10:00:01 – Session started<br>
+        [DEBUG] 2026-05-23 10:00:02 – Driver initialized<br>
+        [INFO] 2026-05-23 10:00:05 – Page loaded<br>
+        [WARN] 2026-05-23 10:00:10 – Slow element detected<br>
+        [ERROR] 2026-05-23 10:00:15 – Element not found (retrying)
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-settings">
+      <label><input type="checkbox" id="setting-dark" checked style="width:auto;margin:0"> Enable dark mode</label><br>
+      <label style="margin-top:0.5rem"><input type="checkbox" id="setting-notif" style="width:auto;margin:0"> Enable notifications</label>
+    </div>
+  </div>
+
+  <!-- ACCORDION -->
+  <div class="card">
+    <div class="card-title">🪗 Accordion / Expandable Sections</div>
+    <div class="card-hint">Practice: click to expand/collapse · verify <code>aria-expanded</code></div>
+    <div id="accordion">
+      <div class="accordion-item">
+        <button class="accordion-header" id="acc-btn-1" aria-expanded="false" onclick="toggleAccordion(1)">
+          What is Selenium? <span class="accordion-arrow" id="acc-arrow-1">▼</span>
+        </button>
+        <div class="accordion-body" id="acc-body-1">Selenium is an open-source browser automation framework. It supports multiple languages (Python, Java, JavaScript) and all major browsers.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" id="acc-btn-2" aria-expanded="false" onclick="toggleAccordion(2)">
+          What are the types of waits? <span class="accordion-arrow" id="acc-arrow-2">▼</span>
+        </button>
+        <div class="accordion-body" id="acc-body-2">Implicit Wait, Explicit Wait, and Fluent Wait. Explicit waits with Expected Conditions are the recommended approach for most scenarios.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" id="acc-btn-3" aria-expanded="false" onclick="toggleAccordion(3)">
+          How to handle dynamic elements? <span class="accordion-arrow" id="acc-arrow-3">▼</span>
+        </button>
+        <div class="accordion-body" id="acc-body-3">Use dynamic XPath with contains(), starts-with(), or normalize-space(). Combine with explicit waits and retry logic for flaky elements.</div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header" id="acc-btn-4" aria-expanded="false" onclick="toggleAccordion(4)">
+          Page Object Model (POM) pattern? <span class="accordion-arrow" id="acc-arrow-4">▼</span>
+        </button>
+        <div class="accordion-body" id="acc-body-4">POM separates locators and actions into page classes, making tests maintainable and reusable. Each web page has a corresponding Page class.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLTIPS -->
+  <div class="card">
+    <div class="card-title">💬 Tooltips</div>
+    <div class="card-hint">Use: <code>ActionChains(driver).move_to_element(el).perform()</code> then read tooltip text</div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:0.5rem">
+      <div class="has-tooltip">
+        <button class="btn btn-secondary" id="tooltip-info">ℹ️ Info</button>
+        <span class="tooltip" id="tooltip-info-text" role="tooltip">This is an info tooltip with details</span>
+      </div>
+      <div class="has-tooltip">
+        <button class="btn btn-warning" id="tooltip-warn">⚠️ Warning</button>
+        <span class="tooltip" id="tooltip-warn-text" role="tooltip">Warning: action cannot be undone</span>
+      </div>
+      <div class="has-tooltip">
+        <button class="btn btn-danger" id="tooltip-del">🗑️ Delete</button>
+        <span class="tooltip" id="tooltip-del-text" role="tooltip">Permanently delete this record</span>
+      </div>
+      <div class="has-tooltip">
+        <span style="font-family:var(--mono);font-size:0.8rem;color:var(--text-muted);cursor:help;text-decoration:underline dotted" id="tooltip-text">title attribute tooltip</span>
+        <span class="tooltip" role="tooltip">I'm triggered on a text element</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEXT MENU -->
+  <div class="card">
+    <div class="card-title">🖱️ Custom Context Menu (Right-click)</div>
+    <div class="card-hint">Use: <code>ActionChains(driver).context_click(element).perform()</code></div>
+    <div class="context-zone" id="context-zone" oncontextmenu="showContextMenu(event)">
+      Right-click anywhere in this zone
+    </div>
+    <div class="result-box" id="context-result" style="margin-top:0.75rem"></div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="card">
+    <div class="card-title">🎨 HTML5 Canvas</div>
+    <div class="card-hint">Practice: <code>ActionChains</code> click_and_hold + move for drawing</div>
+    <canvas id="practice-canvas" width="500" height="150" onmousedown="startDraw(event)" onmousemove="draw(event)" onmouseup="stopDraw()" onmouseleave="stopDraw()"></canvas>
+    <div class="btn-row" style="margin-top:0.5rem">
+      <button class="btn btn-secondary" id="canvas-clear" onclick="clearCanvas()">Clear Canvas</button>
+      <button class="btn btn-secondary" id="canvas-red" onclick="setColor('#ff453a')">🔴</button>
+      <button class="btn btn-secondary" id="canvas-green" onclick="setColor('#30d158')">🟢</button>
+      <button class="btn btn-secondary" id="canvas-cyan" onclick="setColor('#00e5ff')">🔵</button>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS / TOAST -->
+  <div class="card">
+    <div class="card-title">🔔 Toast Notifications</div>
+    <div class="card-hint">Practice: wait for toast to appear → read message → wait for it to disappear</div>
+    <div class="btn-row">
+      <button class="btn btn-success" id="toast-success" onclick="showToast('✓ Operation completed successfully!','var(--success)')">Success Toast</button>
+      <button class="btn btn-warning" id="toast-warn" onclick="showToast('⚠️ Warning: Check your inputs','var(--warning)')">Warning Toast</button>
+      <button class="btn btn-danger" id="toast-error" onclick="showToast('✕ Error: Something went wrong','var(--error)')">Error Toast</button>
+      <button class="btn btn-secondary" id="toast-info" onclick="showToast('ℹ️ Info: New update available','var(--accent)')">Info Toast</button>
+    </div>
+  </div>
+
+  <!-- HIDDEN ELEMENTS -->
+  <div class="card">
+    <div class="card-title">👻 Hidden / Invisible Elements</div>
+    <div class="card-hint">Practice: <code>is_displayed()</code> · <code>execute_script</code> to reveal · visibility checks</div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="reveal-btn" onclick="revealHidden()">Reveal Hidden Elements</button>
+    </div>
+    <div style="margin-top:1rem">
+      <div id="hidden-display" class="hidden-by-class" style="background:rgba(168,255,62,0.1);border:1px solid var(--accent3);border-radius:8px;padding:0.75rem;color:var(--accent3);font-family:var(--mono);font-size:0.8rem">
+        🎉 Hidden by display:none — id="hidden-display"
+      </div>
+      <div id="hidden-opacity" class="opacity-zero" style="background:rgba(0,229,255,0.1);border:1px solid var(--accent);border-radius:8px;padding:0.75rem;color:var(--accent);font-family:var(--mono);font-size:0.8rem;margin-top:0.5rem">
+        👁️ Hidden by opacity:0 — id="hidden-opacity"
+      </div>
+      <div id="hidden-visibility" style="visibility:hidden;background:rgba(191,90,242,0.1);border:1px solid var(--accent4);border-radius:8px;padding:0.75rem;color:var(--accent4);font-family:var(--mono);font-size:0.8rem;margin-top:0.5rem">
+        🕵️ Hidden by visibility:hidden — id="hidden-visibility"
+      </div>
+    </div>
+  </div>
+
+  <!-- FILE DOWNLOAD SIMULATION -->
+  <div class="card">
+    <div class="card-title">⬇️ File Download</div>
+    <div class="card-hint">Practice: click download → verify file appears in download directory</div>
+    <div class="btn-row">
+      <a href="data:text/csv;charset=utf-8,Name,Age,City%0AAlice,30,Bangalore%0ABob,25,Mumbai" download="test-data.csv" id="download-csv" class="btn btn-secondary">Download CSV</a>
+      <a href="data:application/json;charset=utf-8,%7B%22test%22%3A%22data%22%2C%22selenium%22%3Atrue%7D" download="test-data.json" id="download-json" class="btn btn-secondary">Download JSON</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SECTION 10: SENIOR LEVEL ==================== -->
+<section id="senior">
+  <div class="section-header">
+    <span class="section-level level-4">Level 10</span>
+    <div>
+      <div class="section-title">Senior / Expert Challenges</div>
+      <div class="section-desc">shadow DOM · stale elements · dynamic IDs · broken images · POM · JS executor · perf</div>
+    </div>
+  </div>
+
+  <!-- SHADOW DOM -->
+  <div class="card">
+    <div class="card-title">🌑 Shadow DOM</div>
+    <div class="card-hint">Use: <code>driver.execute_script("return arguments[0].shadowRoot", host)</code></div>
+    <div class="shadow-host" id="shadow-host">
+      <small style="font-family:var(--mono);font-size:0.7rem;color:var(--accent4)">↑ Shadow Host boundary (dashed purple)</small>
+      <div id="shadow-content-fallback" style="margin-top:0.5rem">
+        <input type="text" placeholder="Input inside Shadow DOM" id="shadow-input" style="background:var(--surface2)">
+        <button class="btn btn-secondary" id="shadow-btn">Shadow Button</button>
+        <p id="shadow-para" style="color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem">Shadow paragraph text</p>
+      </div>
+    </div>
+    <div class="code-block" style="margin-top:0.75rem">
+# Access Shadow DOM<br>
+host = driver.find_element(By.ID, "shadow-host")<br>
+shadow = driver.execute_script("return arguments[0].shadowRoot", host)<br>
+shadow_input = shadow.find_element(By.CSS_SELECTOR, "#shadow-input")<br>
+shadow_input.send_keys("Shadow DOM text")
+    </div>
+  </div>
+
+  <!-- STALE ELEMENT -->
+  <div class="card">
+    <div class="card-title">💀 Stale Element Reference</div>
+    <div class="card-hint">Click "Refresh List" → old references become stale. Practice retry with <code>StaleElementReferenceException</code></div>
+    <button class="btn btn-primary" id="refresh-list-btn" onclick="refreshList()">Refresh List (makes elements stale)</button>
+    <div id="stale-list" style="margin-top:0.75rem">
+      <div id="stale-item-1" class="stale-item" style="padding:0.4rem;font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">→ Item 1 (find this after refresh)</div>
+      <div id="stale-item-2" class="stale-item" style="padding:0.4rem;font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">→ Item 2 (stale after refresh)</div>
+      <div id="stale-item-3" class="stale-item" style="padding:0.4rem;font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">→ Item 3 (re-locate needed)</div>
+    </div>
+    <div class="code-block" style="margin-top:0.75rem">
+# Retry on stale reference<br>
+from selenium.common.exceptions import StaleElementReferenceException<br>
+for _ in range(3):<br>
+  try:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el = driver.find_element(By.ID, "stale-item-1")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;el.click(); break<br>
+  except StaleElementReferenceException:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;time.sleep(0.5)
+    </div>
+  </div>
+
+  <!-- DYNAMIC IDs -->
+  <div class="card">
+    <div class="card-title">🎲 Dynamic IDs & Attributes</div>
+    <div class="card-hint">IDs change on reload. Use partial matches: <code>contains(@id,'btn-dyn')</code></div>
+    <div id="dynamic-container">
+      <!-- filled by JS with random IDs -->
+    </div>
+    <button class="btn btn-secondary" id="regen-ids" onclick="regenDynamicIds()" style="margin-top:0.75rem">Regenerate Dynamic IDs</button>
+  </div>
+
+  <!-- BROKEN IMAGES -->
+  <div class="card">
+    <div class="card-title">🖼️ Broken Images Detection</div>
+    <div class="card-hint">Use JS executor to check <code>naturalWidth === 0</code> for each image</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.5rem">
+      <div style="text-align:center">
+        <img src="https://example.com/valid-image.png" class="broken-img" id="img-valid" alt="Valid Image" onerror="this.style.background='#1a1a24';this.style.display='flex';this.setAttribute('data-broken','true')" style="display:block">
+        <div style="font-family:var(--mono);font-size:0.7rem;color:var(--text-muted);margin-top:0.25rem">img-valid</div>
+      </div>
+      <div style="text-align:center">
+        <img src="/broken/path/image.jpg" class="broken-img" id="img-broken-1" alt="Broken Image 1" data-broken="true" style="display:block;background:rgba(255,69,58,0.1);border-color:var(--error)">
+        <div style="font-family:var(--mono);font-size:0.7rem;color:var(--error);margin-top:0.25rem">img-broken-1 ✗</div>
+      </div>
+      <div style="text-align:center">
+        <img src="/another/broken.png" class="broken-img" id="img-broken-2" alt="" data-broken="true" style="display:block;background:rgba(255,69,58,0.1);border-color:var(--error)">
+        <div style="font-family:var(--mono);font-size:0.7rem;color:var(--error);margin-top:0.25rem">img-broken-2 (no alt) ✗</div>
+      </div>
+    </div>
+    <div class="code-block" style="margin-top:0.75rem">
+# Detect broken images<br>
+images = driver.find_elements(By.TAG_NAME, "img")<br>
+for img in images:<br>
+&nbsp;&nbsp;is_broken = driver.execute_script(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"return arguments[0].naturalWidth === 0", img)<br>
+&nbsp;&nbsp;if is_broken: print(f"Broken: {img.get_attribute('src')}")
+    </div>
+  </div>
+
+  <!-- JS EXECUTOR CHALLENGES -->
+  <div class="card">
+    <div class="card-title">⚡ JavaScript Executor Challenges</div>
+    <div class="card-hint">Practice: <code>driver.execute_script()</code> · <code>execute_async_script()</code></div>
+    <div class="grid-2">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.75rem;color:var(--accent);margin-bottom:0.5rem">Targets for JS Executor:</div>
+        <button class="btn btn-secondary" id="js-target-btn" data-custom="selenium-rocks" aria-label="JS Target Button">JS Target Button</button>
+        <div id="js-target-div" style="margin-top:0.5rem;padding:0.75rem;background:var(--surface2);border-radius:8px;font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">
+          Scroll this into view via JS
+        </div>
+      </div>
+      <div>
+        <div class="code-block">
+# JS click (for overlapping elements)<br>
+driver.execute_script(<br>
+&nbsp;&nbsp;"arguments[0].click()", element)<br><br>
+# Scroll into view<br>
+driver.execute_script(<br>
+&nbsp;&nbsp;"arguments[0].scrollIntoView(true)", el)<br><br>
+# Get property<br>
+val = driver.execute_script(<br>
+&nbsp;&nbsp;"return arguments[0].value", el)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NETWORK / PERFORMANCE -->
+  <div class="card">
+    <div class="card-title">📡 Network & Performance Metrics</div>
+    <div class="card-hint">Use: <code>execute_script("return window.performance.timing")</code></div>
+    <button class="btn btn-secondary" id="perf-btn" onclick="showPerf()">Show Performance Metrics</button>
+    <div class="result-box" id="perf-result" style="margin-top:0.75rem"></div>
+    <div class="code-block" style="margin-top:0.75rem">
+# Get page load time<br>
+timing = driver.execute_script("return window.performance.timing")<br>
+load_time = timing['loadEventEnd'] - timing['navigationStart']<br>
+print(f"Page Load: {load_time}ms")
+    </div>
+  </div>
+
+  <!-- COOKIE MANAGEMENT -->
+  <div class="card">
+    <div class="card-title">🍪 Cookie Management</div>
+    <div class="card-hint">Use: <code>driver.get_cookies()</code> · <code>add_cookie()</code> · <code>delete_cookie()</code></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="set-cookie-btn" onclick="setCookie('selenium_test','active',7)">Set Cookie</button>
+      <button class="btn btn-secondary" id="get-cookie-btn" onclick="showCookies()">Show Cookies</button>
+      <button class="btn btn-danger" id="del-cookie-btn" onclick="deleteCookie('selenium_test')">Delete Cookie</button>
+    </div>
+    <div class="result-box" id="cookie-result" style="margin-top:0.75rem"></div>
+  </div>
+
+  <!-- LOCAL STORAGE -->
+  <div class="card">
+    <div class="card-title">💾 localStorage / sessionStorage</div>
+    <div class="card-hint">Use: <code>execute_script("return window.localStorage.getItem('key')")</code></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="ls-set" onclick="lsSet()">Set localStorage</button>
+      <button class="btn btn-secondary" id="ls-get" onclick="lsGet()">Get localStorage</button>
+      <button class="btn btn-secondary" id="ss-set" onclick="ssSet()">Set sessionStorage</button>
+      <button class="btn btn-danger" id="ls-clear" onclick="lsClear()">Clear All</button>
+    </div>
+    <div class="result-box" id="storage-result" style="margin-top:0.75rem"></div>
+  </div>
+
+  <!-- SKELETON LOADING -->
+  <div class="card">
+    <div class="card-title">💀 Skeleton Loading State</div>
+    <div class="card-hint">Wait for skeleton to disappear and real content to appear</div>
+    <button class="btn btn-secondary" id="load-skeleton-btn" onclick="simulateSkeleton()">Simulate Data Load</button>
+    <div id="skeleton-zone" style="margin-top:0.75rem">
+      <div style="display:flex;align-items:center;gap:0.75rem">
+        <div class="skeleton skel-avatar"></div>
+        <div style="flex:1">
+          <div class="skeleton skel-line" style="width:60%"></div>
+          <div class="skeleton skel-line" style="width:40%"></div>
+        </div>
+      </div>
+      <div class="skeleton skel-line" style="margin-top:0.75rem"></div>
+      <div class="skeleton skel-line" style="width:80%"></div>
+    </div>
+    <div id="real-content" style="display:none">
+      <div class="alert alert-success">✓ Real content loaded! User: John Doe | Role: Senior QA</div>
+    </div>
+  </div>
+
+  <!-- CSS CHART -->
+  <div class="card">
+    <div class="card-title">📊 Animated Bar Chart</div>
+    <div class="card-hint">Practice: read bar heights · verify aria-labels · data-value attributes</div>
+    <button class="btn btn-secondary" id="animate-chart-btn" onclick="animateChart()" style="margin-bottom:1rem">Animate Chart</button>
+    <div class="bar-chart" id="bar-chart">
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div class="bar" id="bar-1" data-value="75" aria-label="Q1: 75%" style="width:100%;height:0%"></div>
+        <div class="bar-label">Q1</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div class="bar" id="bar-2" data-value="90" aria-label="Q2: 90%" style="width:100%;height:0%;background:linear-gradient(180deg,var(--accent3),var(--success))"></div>
+        <div class="bar-label">Q2</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div class="bar" id="bar-3" data-value="60" aria-label="Q3: 60%" style="width:100%;height:0%;background:linear-gradient(180deg,var(--accent2),#ff453a)"></div>
+        <div class="bar-label">Q3</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1">
+        <div class="bar" id="bar-4" data-value="85" aria-label="Q4: 85%" style="width:100%;height:0%;background:linear-gradient(180deg,var(--accent4),var(--accent))"></div>
+        <div class="bar-label">Q4</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCESSIBILITY -->
+  <div class="card">
+    <div class="card-title">♿ Accessibility (ARIA) Practice</div>
+    <div class="card-hint">Practice: find by role · aria-label · aria-expanded · focus management</div>
+    <div role="navigation" aria-label="Breadcrumb" id="breadcrumb">
+      <ol style="display:flex;gap:0.5rem;list-style:none;font-family:var(--mono);font-size:0.8rem">
+        <li><a href="#" style="color:var(--accent)">Home</a></li>
+        <li style="color:var(--text-muted)">/</li>
+        <li><a href="#" style="color:var(--accent)">Practice</a></li>
+        <li style="color:var(--text-muted)">/</li>
+        <li aria-current="page" style="color:var(--text)">Senior Level</li>
+      </ol>
+    </div>
+    <div role="alert" aria-live="polite" id="live-region" style="margin-top:0.75rem;min-height:1.5rem;font-family:var(--mono);font-size:0.8rem;color:var(--accent3)"></div>
+    <div class="btn-row" style="margin-top:0.5rem">
+      <button class="btn btn-secondary" id="aria-announce" role="button" aria-label="Announce test message" onclick="document.getElementById('live-region').textContent='ARIA live region updated at '+new Date().toLocaleTimeString()">Trigger ARIA Announce</button>
+      <button class="btn btn-secondary" id="focus-trap-btn" aria-pressed="false" onclick="toggleAria(this)">Toggle aria-pressed</button>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Reference -->
+<section style="margin-top:3rem">
+  <div class="section-header">
+    <span class="section-level" style="background:rgba(0,229,255,0.1);color:var(--accent)">REF</span>
+    <div>
+      <div class="section-title">Quick Reference Cheatsheet</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="code-block">
+# === LOCATOR STRATEGIES ===<br>
+By.ID | By.NAME | By.CLASS_NAME | By.TAG_NAME<br>
+By.CSS_SELECTOR | By.XPATH | By.LINK_TEXT | By.PARTIAL_LINK_TEXT<br><br>
+
+# === ELEMENT ACTIONS ===<br>
+el.click() | el.send_keys("text") | el.clear() | el.submit()<br>
+el.text | el.get_attribute("value") | el.is_displayed() | el.is_enabled()<br><br>
+
+# === WAITS ===<br>
+WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID,"x")))<br>
+EC.element_to_be_clickable | EC.invisibility_of_element | EC.text_to_be_present<br><br>
+
+# === SELECT DROPDOWN ===<br>
+from selenium.webdriver.support.ui import Select<br>
+Select(el).select_by_visible_text("Option") | .select_by_value("v") | .select_by_index(0)<br><br>
+
+# === ACTION CHAINS ===<br>
+ActionChains(driver).move_to_element(el).click().perform()<br>
+ActionChains(driver).drag_and_drop(src, tgt).perform()<br>
+ActionChains(driver).double_click(el).perform()<br><br>
+
+# === WINDOW / FRAME ===<br>
+driver.switch_to.frame("id") | driver.switch_to.default_content()<br>
+driver.switch_to.window(handle) | driver.window_handles<br>
+driver.switch_to.alert.accept() | .dismiss() | .send_keys("text")<br><br>
+
+# === JS EXECUTOR ===<br>
+driver.execute_script("arguments[0].click()", el)<br>
+driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")<br>
+driver.execute_script("return arguments[0].shadowRoot", host)
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- CONTEXT MENU -->
+<div id="context-menu">
+  <ul>
+    <li id="ctx-copy" onclick="contextAction('Copy')">📋 Copy</li>
+    <li id="ctx-paste" onclick="contextAction('Paste')">📋 Paste</li>
+    <li id="ctx-inspect" onclick="contextAction('Inspect')">🔍 Inspect</li>
+    <li id="ctx-save" onclick="contextAction('Save As')">💾 Save As</li>
+  </ul>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner">
+  <span>🍪 We use cookies to enhance your testing experience on this practice page.</span>
+  <div style="display:flex;gap:0.5rem">
+    <button class="btn btn-primary btn-sm" id="accept-cookies" onclick="document.getElementById('cookie-banner').classList.add('hidden');setCookie('cookies_accepted','true',30)">Accept All</button>
+    <button class="btn btn-secondary btn-sm" id="reject-cookies" onclick="document.getElementById('cookie-banner').classList.add('hidden')">Reject</button>
+  </div>
+</div>
+
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// ---- UTILS ----
+function showEvent(id, msg) { document.getElementById(id).textContent = '> ' + msg; }
+function rand(n) { return Math.floor(Math.random() * n); }
+
+// ---- AUTOCOMPLETE ----
+const AC_DATA = ['Selenium WebDriver','Selenium Grid','Selenium IDE','Cypress.io','Playwright','Puppeteer','WebdriverIO','Appium','TestNG','JUnit','PyTest','Robot Framework','Cucumber BDD'];
+function showAutocomplete(val) {
+  const list = document.getElementById('autocomplete-list');
+  if (!val) { list.style.display = 'none'; return; }
+  const matches = AC_DATA.filter(x => x.toLowerCase().includes(val.toLowerCase()));
+  list.innerHTML = matches.map(m => `<div class="ac-item" onclick="selectAC('${m}')">${m}</div>`).join('');
+  list.style.display = matches.length ? 'block' : 'none';
+}
+function selectAC(val) {
+  document.getElementById('ac-input').value = val;
+  document.getElementById('autocomplete-list').style.display = 'none';
+  document.getElementById('ac-result').textContent = '> Selected: ' + val;
+}
+
+// ---- STEPPER ----
+let stepVal = 1;
+function stepperChange(d) {
+  stepVal = Math.max(0, Math.min(99, stepVal + d));
+  document.getElementById('stepper-val').textContent = stepVal;
+  document.getElementById('stepper-result').textContent = '> Value: ' + stepVal;
+}
+
+// ---- STAR RATING ----
+document.querySelectorAll('.star-rating input').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('rating-result').textContent = '> Rating: ' + r.value + ' star(s)';
+  });
+});
+
+// ---- MOUSE EVENTS ----
+let longPressTimer;
+function startLong() { longPressTimer = setTimeout(() => showEvent('hover-result','Long press detected! (500ms+) ✓'), 500); }
+function endLong() { clearTimeout(longPressTimer); }
+
+// ---- KEYBOARD ----
+function captureKey(e) {
+  const parts = [];
+  if (e.ctrlKey) parts.push('Ctrl');
+  if (e.altKey) parts.push('Alt');
+  if (e.shiftKey) parts.push('Shift');
+  parts.push(e.key);
+  document.getElementById('key-result').textContent = '> Key: ' + parts.join('+') + ' (code: ' + e.code + ')';
+}
+function selectAll() { document.getElementById('key-input').select(); document.getElementById('key-result').textContent = '> All text selected'; }
+function clearInput() { document.getElementById('key-input').value = ''; document.getElementById('key-result').textContent = '> Input cleared'; }
+
+// ---- DRAG & DROP ----
+let dragged;
+function dragStart(e, id) { dragged = id; e.dataTransfer.setData('text', id); document.getElementById(id).classList.add('dragging'); }
+function dropItem(e) {
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text') || dragged;
+  e.currentTarget.classList.remove('dragover');
+  const el = document.getElementById(id);
+  if (el) { e.currentTarget.appendChild(el); el.classList.remove('dragging'); document.getElementById('drag-result').textContent = '> Dropped: ' + el.textContent.trim(); }
+}
+
+// ---- WAITS ----
+function loadDelayed() {
+  const c = document.getElementById('delayed-container');
+  c.innerHTML = '<div class="spinner"></div>';
+  setTimeout(() => {
+    c.innerHTML = '<div id="delayed-element" class="alert alert-success">✓ Element appeared after 3 second delay! (id="delayed-element")</div>';
+  }, 3000);
+}
+function showSpinner() {
+  const s = document.getElementById('spinner-el'), t = document.getElementById('spinner-text'), d = document.getElementById('spinner-done');
+  s.style.display = 'inline-block'; t.textContent = 'Loading data...'; d.style.display = 'none';
+  document.getElementById('spinner-btn').disabled = true;
+  setTimeout(() => {
+    s.style.display = 'none'; t.textContent = ''; d.style.display = 'block';
+    document.getElementById('spinner-btn').disabled = false;
+  }, 2500);
+}
+function toggleButtonState() {
+  const btn = document.getElementById('state-submit');
+  const txt = document.getElementById('state-text');
+  const isDisabled = btn.disabled;
+  btn.disabled = !isDisabled; btn.style.opacity = isDisabled ? '1' : '0.4';
+  txt.textContent = 'Status: ' + (isDisabled ? 'enabled' : 'disabled');
+  document.getElementById('enable-btn').textContent = isDisabled ? 'Disable Submit Button' : 'Enable Submit Button';
+}
+function simulateAjax() {
+  const z = document.getElementById('ajax-result-zone');
+  z.innerHTML = '<div style="font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)"><span class="spinner" style="width:16px;height:16px"></span> Fetching...</div>';
+  setTimeout(() => {
+    z.innerHTML = '<div id="ajax-result" class="alert alert-info">📦 AJAX Response: { users: 42, status: "ok", timestamp: "' + new Date().toISOString() + '" }</div>';
+  }, 2000);
+}
+let progressInterval;
+function startProgress() {
+  clearInterval(progressInterval);
+  let p = 0;
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('progress-text').textContent = '0%';
+  document.getElementById('progress-btn').disabled = true;
+  progressInterval = setInterval(() => {
+    p += rand(8) + 2;
+    if (p >= 100) { p = 100; clearInterval(progressInterval); document.getElementById('progress-btn').disabled = false; }
+    document.getElementById('progress-bar').style.width = p + '%';
+    document.getElementById('progress-text').textContent = p + '%';
+  }, 300);
+}
+
+// ---- COUNTDOWN ----
+let countdownTimer, countdownSecs = 10;
+function startCountdown() {
+  clearInterval(countdownTimer);
+  document.getElementById('countdown-done').style.display = 'none';
+  countdownTimer = setInterval(() => {
+    countdownSecs--;
+    const m = String(Math.floor(countdownSecs / 60)).padStart(2, '0');
+    const s = String(countdownSecs % 60).padStart(2, '0');
+    document.getElementById('countdown').textContent = m + ':' + s;
+    if (countdownSecs <= 0) { clearInterval(countdownTimer); document.getElementById('countdown-done').style.display = 'flex'; }
+  }, 1000);
+}
+function resetCountdown() { clearInterval(countdownTimer); countdownSecs = 10; document.getElementById('countdown').textContent = '00:10'; document.getElementById('countdown-done').style.display = 'none'; }
+
+// ---- TABLE ----
+function tableAction(act, name) { document.getElementById('table-result').textContent = '> ' + act + ' clicked for: ' + name; }
+function filterTable(val) {
+  document.querySelectorAll('#sort-tbody tr').forEach(r => {
+    r.style.display = r.cells[0].textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
+  });
+}
+let sortDir = {};
+function sortTable(col) {
+  const tb = document.getElementById('sort-tbody');
+  const rows = Array.from(tb.rows);
+  sortDir[col] = !sortDir[col];
+  rows.sort((a, b) => {
+    const aT = a.cells[col].textContent.trim(), bT = b.cells[col].textContent.trim();
+    const aN = parseFloat(aT), bN = parseFloat(bT);
+    if (!isNaN(aN) && !isNaN(bN)) return sortDir[col] ? aN - bN : bN - aN;
+    return sortDir[col] ? aT.localeCompare(bT) : bT.localeCompare(aT);
+  });
+  rows.forEach(r => tb.appendChild(r));
+}
+
+// ---- INFINITE SCROLL ----
+let infiniteCount = 0;
+const colors = ['#00e5ff','#a8ff3e','#ff6b35','#bf5af2','#30d158','#ffd60a'];
+function addInfiniteItems(n) {
+  const list = document.getElementById('infinite-list');
+  for (let i = 0; i < n; i++) {
+    infiniteCount++;
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.id = 'list-item-' + infiniteCount;
+    const c = colors[infiniteCount % colors.length];
+    item.innerHTML = `<div class="list-avatar" style="background:${c}20;color:${c}">${String.fromCharCode(64 + (infiniteCount % 26 || 26))}</div><div><div style="font-size:0.85rem">User #${String(infiniteCount).padStart(3,'0')}</div><div style="font-size:0.7rem;color:var(--text-muted);font-family:var(--mono)">user${infiniteCount}@example.com</div></div>`;
+    list.appendChild(item);
+  }
+}
+addInfiniteItems(8);
+let loadingMore = false;
+function checkInfiniteScroll(el) {
+  if (loadingMore) return;
+  if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) {
+    loadingMore = true;
+    document.getElementById('loading-more').style.display = 'block';
+    setTimeout(() => { addInfiniteItems(5); document.getElementById('loading-more').style.display = 'none'; loadingMore = false; }, 800);
+  }
+}
+
+// ---- WINDOW / POPUP ----
+function openNewTab() { window.open(location.href + '#locators', '_blank'); document.getElementById('window-result').textContent = '> New tab opened. Switch with driver.switch_to.window(driver.window_handles[-1])'; }
+function openNewWindow() { window.open(location.href, 'popup', 'width=600,height=500'); document.getElementById('window-result').textContent = '> New window opened. Total handles: ' + (window.opener ? 2 : 2); }
+function openPopup() { const w = window.open('', 'popup', 'width=350,height=250'); w.document.write('<html><body style="background:#111118;color:#e8e8f0;font-family:monospace;padding:1rem"><h3 style="color:#00e5ff">Popup Window</h3><input id="popup-input" type="text" placeholder="Input in popup" style="width:100%;background:#1a1a24;border:1px solid #2a2a3a;color:#e8e8f0;padding:0.5rem;border-radius:6px;margin:0.5rem 0"><br><button id="popup-close" onclick="window.close()" style="background:#00e5ff;color:#000;border:none;border-radius:6px;padding:0.5rem 1rem;cursor:pointer;font-weight:700">Close</button></body></html>'); }
+
+// ---- ALERTS ----
+function showAlert() { alert('Selenium Practice Alert!\nid: simple-alert'); document.getElementById('alert-result').textContent = '> Alert accepted'; }
+function showConfirm() { const r = confirm('Do you want to proceed?'); document.getElementById('alert-result').textContent = '> Confirm: ' + (r ? 'OK (accepted)' : 'Cancel (dismissed)'); }
+function showPrompt() { const r = prompt('Enter your name:', 'Selenium User'); document.getElementById('alert-result').textContent = '> Prompt result: ' + (r || '(cancelled)'); }
+function timedAlert() { document.getElementById('alert-result').textContent = '> Alert will appear in 3 seconds...'; setTimeout(() => alert('Timed Alert! Practice: WebDriverWait for alert_is_present'), 3000); }
+function modalAction(type) {
+  const input = document.getElementById('modal-input').value;
+  document.getElementById('modal-result').textContent = '> Action: ' + type + (input ? ' | Input: ' + input : '');
+  if (type === 'confirmed') document.getElementById('main-modal').classList.remove('open');
+}
+
+// ---- TABS ----
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-btn-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ---- ACCORDION ----
+function toggleAccordion(n) {
+  const body = document.getElementById('acc-body-' + n);
+  const arrow = document.getElementById('acc-arrow-' + n);
+  const btn = document.getElementById('acc-btn-' + n);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  arrow.classList.toggle('open', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+// ---- CONTEXT MENU ----
+const cm = document.getElementById('context-menu');
+document.addEventListener('click', () => cm.style.display = 'none');
+function showContextMenu(e) {
+  e.preventDefault();
+  cm.style.display = 'block';
+  cm.style.left = e.pageX + 'px';
+  cm.style.top = e.pageY + 'px';
+}
+function contextAction(a) { document.getElementById('context-result').textContent = '> Context menu: ' + a + ' selected'; cm.style.display = 'none'; }
+
+// ---- CANVAS ----
+let drawing = false, ctx, drawColor = '#00e5ff';
+window.addEventListener('load', () => {
+  const c = document.getElementById('practice-canvas');
+  ctx = c.getContext('2d');
+  ctx.strokeStyle = drawColor; ctx.lineWidth = 3; ctx.lineCap = 'round';
+  c.width = c.offsetWidth || 500;
+});
+function startDraw(e) { drawing = true; const r = e.target.getBoundingClientRect(); ctx.beginPath(); ctx.moveTo(e.clientX - r.left, e.clientY - r.top); }
+function draw(e) { if (!drawing) return; const r = e.target.getBoundingClientRect(); ctx.lineTo(e.clientX - r.left, e.clientY - r.top); ctx.stroke(); }
+function stopDraw() { drawing = false; }
+function clearCanvas() { const c = document.getElementById('practice-canvas'); ctx.clearRect(0, 0, c.width, c.height); }
+function setColor(c) { drawColor = c; if (ctx) ctx.strokeStyle = c; }
+
+// ---- TOAST ----
+function showToast(msg, color) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.id = 'toast-' + Date.now();
+  t.style.borderLeftColor = color;
+  t.textContent = msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ---- HIDDEN ELEMENTS ----
+function revealHidden() {
+  document.getElementById('hidden-display').classList.remove('hidden-by-class');
+  document.getElementById('hidden-display').style.display = 'block';
+  document.getElementById('hidden-opacity').style.opacity = '1';
+  document.getElementById('hidden-visibility').style.visibility = 'visible';
+  showToast('Hidden elements revealed!', 'var(--accent3)');
+}
+
+// ---- REGISTRATION SUBMIT ----
+function handleRegSubmit() {
+  const fields = ['reg-first','reg-last','reg-email'];
+  let valid = true;
+  fields.forEach(f => { if (!document.getElementById(f).value) valid = false; });
+  document.getElementById('reg-form-result').textContent = valid
+    ? '> ✓ Form submitted! Name: ' + document.getElementById('reg-first').value + ' ' + document.getElementById('reg-last').value
+    : '> ✕ Validation failed: Fill required fields';
+}
+
+// ---- DYNAMIC IDs ----
+function regenDynamicIds() {
+  const c = document.getElementById('dynamic-container');
+  const items = ['Login Button','Search Field','Profile Icon','Notification Bell','Settings Gear'];
+  c.innerHTML = items.map((name, i) => {
+    const uid = 'btn-dyn-' + Math.random().toString(36).substr(2,6);
+    return `<div style="margin-bottom:0.5rem"><button class="btn btn-secondary" id="${uid}" data-label="${name}" style="width:100%;justify-content:space-between">
+      <span>${name}</span>
+      <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-muted)">${uid}</span>
+    </button></div>`;
+  }).join('');
+}
+regenDynamicIds();
+
+// ---- STALE ELEMENT REFRESH ----
+let refreshCount = 0;
+function refreshList() {
+  refreshCount++;
+  const list = document.getElementById('stale-list');
+  list.innerHTML = ['Item 1','Item 2','Item 3'].map((name, i) => `<div id="stale-item-${i+1}" class="stale-item" style="padding:0.4rem;font-family:var(--mono);font-size:0.8rem;color:var(--text-muted)">→ ${name} (refreshed ${refreshCount}x)</div>`).join('');
+  showToast('List refreshed! Old references are now stale.', 'var(--warning)');
+}
+
+// ---- PERFORMANCE ----
+function showPerf() {
+  const t = performance.timing;
+  const load = t.loadEventEnd - t.navigationStart;
+  const dom = t.domContentLoadedEventEnd - t.navigationStart;
+  document.getElementById('perf-result').innerHTML =
+    `> DOM Ready: ${dom}ms | Page Load: ${load}ms\n> Entries: ${performance.getEntriesByType('navigation').length}`;
+}
+
+// ---- COOKIES ----
+function setCookie(name, val, days) {
+  const d = new Date(); d.setTime(d.getTime() + days * 864e5);
+  document.cookie = name + '=' + val + ';expires=' + d.toUTCString() + ';path=/';
+  document.getElementById('cookie-result').textContent = '> Cookie set: ' + name + '=' + val;
+}
+function showCookies() {
+  document.getElementById('cookie-result').textContent = '> Cookies: ' + (document.cookie || '(none)');
+}
+function deleteCookie(name) {
+  document.cookie = name + '=;expires=Thu,01 Jan 1970 00:00:00 UTC;path=/';
+  document.getElementById('cookie-result').textContent = '> Cookie deleted: ' + name;
+}
+
+// ---- LOCALSTORAGE ----
+function lsSet() { localStorage.setItem('selenium_key','selenium_value_' + Date.now()); document.getElementById('storage-result').textContent = '> localStorage set: selenium_key'; }
+function lsGet() { document.getElementById('storage-result').textContent = '> localStorage get: ' + (localStorage.getItem('selenium_key') || 'null'); }
+function ssSet() { sessionStorage.setItem('session_key','session_val_' + Date.now()); document.getElementById('storage-result').textContent = '> sessionStorage set: session_key'; }
+function lsClear() { localStorage.clear(); sessionStorage.clear(); document.getElementById('storage-result').textContent = '> All storage cleared'; }
+
+// ---- SKELETON ----
+function simulateSkeleton() {
+  document.getElementById('real-content').style.display = 'none';
+  document.getElementById('skeleton-zone').style.display = 'block';
+  document.getElementById('load-skeleton-btn').disabled = true;
+  setTimeout(() => {
+    document.getElementById('skeleton-zone').style.display = 'none';
+    document.getElementById('real-content').style.display = 'block';
+    document.getElementById('load-skeleton-btn').disabled = false;
+  }, 2000);
+}
+
+// ---- CHART ----
+function animateChart() {
+  ['bar-1','bar-2','bar-3','bar-4'].forEach(id => {
+    const b = document.getElementById(id);
+    b.style.height = b.dataset.value + '%';
+  });
+}
+
+// ---- ARIA ----
+function toggleAria(btn) {
+  const pressed = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', String(!pressed));
+  btn.textContent = (!pressed ? '✓ ' : '') + 'Toggle aria-pressed';
+}
+
+// ---- COUNTRY/CITY ----
+const cityMap = {
+  IN: ['Bangalore','Mumbai','Delhi','Chennai','Hyderabad'],
+  US: ['New York','San Francisco','Austin','Seattle','Chicago'],
+  UK: ['London','Manchester','Edinburgh','Bristol','Leeds'],
+  AU: ['Sydney','Melbourne','Brisbane','Perth'],
+  CA: ['Toronto','Vancouver','Montreal','Ottawa'],
+  DE: ['Berlin','Munich','Hamburg','Frankfurt'],
+  JP: ['Tokyo','Osaka','Kyoto','Yokohama']
+};
+document.getElementById('reg-country').addEventListener('change', function() {
+  const city = document.getElementById('reg-city');
+  city.innerHTML = '<option value="">-- Select City --</option>';
+  city.disabled = !this.value;
+  if (cityMap[this.value]) cityMap[this.value].forEach(c => { const o = document.createElement('option'); o.value = c.toLowerCase(); o.textContent = c; city.appendChild(o); });
+});
+
+// ---- SCROLL TO TOP ----
+window.addEventListener('scroll', () => {
+  document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
+});
+
+// ---- INIT ----
+document.addEventListener('DOMContentLoaded', () => {
+  animateChart();
+  setTimeout(animateChart, 100);
+});
+</script>
+</body>
+</html>
