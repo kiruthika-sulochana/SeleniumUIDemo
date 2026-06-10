@@ -21,11 +21,11 @@ public class HomePage extends BasePage {
     private By title = By.tagName("h1");
 
     public String getTitleText() {
-        return driver.findElement(title).getText();
+        return DriverFactory.getDriver().findElement(title).getText();
     }
 
     public boolean isTitleDisplayed() {
-        return driver.findElement(title).isDisplayed();
+        return DriverFactory.getDriver().findElement(title).isDisplayed();
     }
 
 }

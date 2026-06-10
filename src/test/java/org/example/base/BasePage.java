@@ -1,11 +1,12 @@
 package org.example.base;
 
+import org.example.utils.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public abstract class BasePage {
 
-    protected WebDriver driver;
+    protected WebDriver driver = DriverFactory.getDriver();
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
