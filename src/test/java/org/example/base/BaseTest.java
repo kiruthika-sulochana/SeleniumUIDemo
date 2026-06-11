@@ -10,12 +10,11 @@ public class BaseTest {
 
     protected WebDriver driver;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void SetUp(ITestContext context)
     {
         DriverFactory.initDriver();
         driver = DriverFactory.getDriver();
-        // Resolve the HTML file relative to the project, so it works both locally and in CI
         String htmlPath = System.getProperty("test.page.url",
                 "file://" + System.getProperty("user.dir") + "/src/test/resources/selenium_practice.html");
         driver.get(htmlPath);
@@ -23,9 +22,9 @@ public class BaseTest {
         context.setAttribute("driver", driver);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown()
     {
-       DriverFactory.quitDriver();
+        DriverFactory.quitDriver();
     }
 }

@@ -5,34 +5,32 @@ import org.example.base.BaseTest;
 import org.example.constants.HomePageData;
 import org.example.listeners.TestListeners;
 import org.example.pages.HomePage;
-import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-@Listeners(TestListeners.class)
+@Listeners({TestListeners.class, com.epam.reportportal.testng.ReportPortalTestNGListener.class})
 public class HomePageTests extends BaseTest {
 
-    HomePage homePage = new HomePage(driver);
+    private HomePage homePage;
+
+    @BeforeMethod(alwaysRun = true, dependsOnMethods = "SetUp")
+    public void initPages() {
+        homePage = new HomePage(driver);
+    }
 
     @Test(groups = {"smoke"})
     public void verifyTitle()
     {
-
-        Assert.assertTrue(BasePage.isElementDisplayed(homePage.getTitle()),"Title is Displayed");
+        Assert.assertTrue(BasePage.isElementDisplayed(homePage.getTitle()), "Title is Displayed");
         Assert.assertEquals(homePage.getTitleText(), HomePageData.EXPECTED_TITLE);
-
-
     }
 
     @Test(groups = {"smoke"})
     public void verifyHomeTabList()
     {
-        homePage.getLocatorTab();
-
-        String list= BasePage.getElementsText(homePage.getHomeTabUrlLink());
+        String list = BasePage.getElementsText(homePage.getHomeTabUrlLink());
 
         Assert.assertNotNull(list.contains(BasePage.getElementText(homePage.getLocatorTab())));
         Assert.assertNotNull(list.contains(BasePage.getElementsText(homePage.getFormsTab())));
@@ -44,8 +42,5 @@ public class HomePageTests extends BaseTest {
         Assert.assertNotNull(list.contains(BasePage.getElementsText(homePage.getFramesTab())));
         Assert.assertNotNull(list.contains(BasePage.getElementsText(homePage.getAdvancedTab())));
         Assert.assertNotNull(list.contains(BasePage.getElementsText(homePage.getSeniorTab())));
-
     }
-
-
 }

@@ -36,9 +36,4 @@ public class LocatorsPage extends BasePage {
         this.emailField = emailField;
     }
 
-    public void sendDataValues(By locator, String value)
-    {
-        WebElement element = DriverFactory.getDriver().findElement(locator);
-        element.sendKeys(value);
-    }
 }
